@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Grayscale - Start Bootstrap Theme</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/near-api-js/dist/near-api-js.min.js"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<script>
+    var CONTRACT_NAME = 'dispa3r.testnet';
+
+    async function connect() {
+        let near = await nearApi.connect({
+            nodeUrl: "https://rpc.testnet.near.org",
+            walletUrl: "https://wallet.testnet.near.org",
+            helperUrl: "https://helper.testnet.near.org",
+            explorerUrl: "https://explorer.testnet.near.org",
+            networkId: 'testnet',
+            keyStore: new window.nearApi.keyStores.BrowserLocalStorageKeyStore(window.localStorage, 'crystal')
+        });
+
+        window.walletConnection = new nearApi.WalletConnection(near);
+        let account;
+        if (window.walletConnection.isSignedIn()) {
+            // Logged in account, can write as user signed up through wallet
+            account = walletConnection.account();
+            // connect to a NEAR smart contract
+            window.contract = new nearApi.Contract(account, CONTRACT_NAME, {
+                viewMethods: [],
+                changeMethods: ['HelloWorld']
+            });
+        } else {
+            // Contract account, normally only gonna work in read only mode
+            account = new nearApi.Account(near.connection, CONTRACT_NAME);
+            //console.log(account);
+        }
+    }
+
+    // Log in user using NEAR Wallet on "Sign In" button click
+</script>
+
+<body>
+    <div>
+        <p id="p1">Hello World!</p>
+        <script>
+            var userName = window.walletConnection.getAccountId();
+            document.getElementById("p1").innerHTML = userName;
+            console.log(userName);
+        </script>
+    </div>
+
+    <div class="row input-group-newsletter">
+        <div class="col">
+            <input class="form-control" id="input" placeholder="say something" />
+        </div>
+        <div class="col-auto">
+            <button onclick="callHello()" class="btn btn-primary" id="submitButton" type="submit">Go!</button>
+        </div>
+    </div>
+
+
+
+</body>
